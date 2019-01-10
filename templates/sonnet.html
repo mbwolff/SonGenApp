@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Un sonnet inconnu{% endblock title %}
+{% block content %}
+    <h1>Un sonnet inconnu</h1>
+    <p>
+      Positive term: {{ pos }} </br>
+      Negative term: {{ neg }} </br>
+      Initial verse index:  {{ no_verses_corpus }}
+    </p>
+    <ol>
+    {% for v in verses %}
+    <li class='parent'>
+      {{ v[1] }}  (<a href='http://www.theatre-classique.fr/pages/programmes/edition.php?t=../documents/{{ v[2] }}' target='_new'>{{ v[2] }}</a>:{{ v[3] }})
+      <div class='child'>{{ v[4] }}</div>
+      {% if loop.index in [4, 8, 11] %}
+    <p></p>
+      {% endif %}
+    </li>
+    {% else %}
+    <li><em>no verses found</em></li>
+    {% endfor %}
+    </ol>
+    <a href="/again">Make another sonnet!</a>
+{% endblock content %}
