@@ -16,7 +16,7 @@ Here's the procedure:
 8. Find a verse in the corpus that is most similar to the modified verse using cosine similarity. The poem's rhyming scheme should follow the pattern _abba abba ccd eed_ where the rhymes alternate between feminine (the last word of the verse ending in a silent _e_) and masculine (the last word ending in some other letter). The [epitran module](https://github.com/dmort27/epitran) is useful for transliterating text into IPA, although it is imperfect (as its authors acknowledge) because the relationship between word spellings and phonetics in French is complicated.
 9. Return to step 6 with the selected verse and continue until the generated text contains 14 verses.
 
-Here are the first lines of the generated text:
+Here are the first lines of a generated sonnet:
 
 ```
 1. Que l'amour est déchu de son autorité (CREBILLON_CATILINA.xml:351)
