@@ -39,3 +39,9 @@ Here is an example of a generated sonnet:
 ```
 
 At the end of each verse is a reference to its source text and line number, which can be referenced in the [Théâtre Classique](http://www.theatre-classique.fr).
+
+The code in `makeSonnet.py` is the web application built with [Flask](http://flask.pocoo.org) and other modules. I recommend [Gunicorn](https://gunicorn.org) for deployment:
+
+```
+gunicorn -b localhost:5000 -w 4 -t 120 --preload makeSonnet:app
+```
