@@ -31,7 +31,7 @@ Here is an example of a generated sonnet:
 
 9. Le Sabre de Galas, celui de Jean de Verth. (MARESCHALA_VERITABLECAPITAINEMATAMORE.xml:1172)
 10. Je lui donne au souper d'un poignard pour dessert. (TRISTAN_MORTSENEQUE.xml:432)
-11.Lesquels sans contourner le rond du voisinage (AURE_DIPNE.xml:243)
+11. Lesquels sans contourner le rond du voisinage (AURE_DIPNE.xml:243)
 
 12. Voudrait charger sa main de cet horrible emploi ? (CREBILLON_IDOMENEE.xml:1218)
 13. Et que sur ce penchant il se fasse une loi... (CORNEILLET_PYRRHUS.xml:35)
