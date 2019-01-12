@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 
 sourcepage = 'http://www.theatre-classique.fr/pages/programmes/PageEdition.php'
 sourcedir = 'http://www.theatre-classique.fr/pages/documents/'
-# These links worked on 29 November 2018
+# These links worked on 11 January 2019
 destdir = '../Fievre'
 
 if not os.path.exists(destdir):
@@ -27,5 +27,5 @@ for link in soup.find_all('a'):
         print(file)
         doc = requests.get(sourcedir + file)
         local_file = open(os.path.join(destdir, file), 'w')
-        local_file.write(doc.text.encode('utf8'))
+        local_file.write(doc.text)
         local_file.close()

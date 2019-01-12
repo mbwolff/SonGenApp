@@ -16,7 +16,6 @@ import sys
 import mysql.connector
 from datetime import datetime
 
-#corpusFile = 'lib/FievreCorpus.pkl'
 pickeledVectorizedCorpusFile = '../lib/VectorizedCorpus.pkl'
 pickeledVectorizerFile = '../lib/Vectorizer.pkl'
 
@@ -26,10 +25,6 @@ mysql_passwd = 'use_songenapp'
 database = 'songenapp'
 
 print('{timestamp} -- started loading corpus file'.format(timestamp=datetime.utcnow().isoformat()))
-
-#pickleFile = open(corpusFile, 'rb')
-#global_corpus = pickle.load(pickleFile)
-#pickleFile.close()
 
 corpus = list()
 cnx = mysql.connector.connect(

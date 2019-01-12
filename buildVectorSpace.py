@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Copyright (c) 2018 Mark Wolff <wolff.mark.b@gmail.com>
 
@@ -48,7 +48,7 @@ if not os.path.exists(pickledir):
 pd = dict()
 num_files = 0
 for fname in os.listdir(sourcedir):
-    if fname.endswith('xml'):
+	if fname.endswith('xml'):
 #		print(fname)
 		nfname = re.sub('xml$', 'pkl', fname)
 		if os.path.exists(os.path.join(pickledir, nfname)):
@@ -67,73 +67,67 @@ for fname in os.listdir(sourcedir):
 #		if root.find('.//SourceDesc/type').text == 'vers':
 			num_files = num_files + 1
 			print(str(num_files) + ' ' + fname)
-			string = unicode()
+			string = str()
 			work = list()
 			ln = 1
 			for line in root.findall('.//body//l'):
-				verse = unicode(line.text)
+				verse = str(line.text)
 				id = int(line.attrib['id'])
 #				print(str(id))
 				if id == ln:
-					string = string + u' ' + verse
+					string = string + ' ' + verse
 				else:
-					work.append(re.sub(u'^\s+', '', string, flags=re.UNICODE))
+					work.append(re.sub('^\s+', '', string, flags=re.UNICODE))
 					string = verse
 					ln = id
-			work.append(re.sub(u'^\s+', '', string, flags=re.UNICODE))
-	        sections = []
-	        current_section = ''
-	        last_chunk = work.pop()
-	        for chunk in work:
-	            if len(current_section) + len(chunk) + 1 < 1000000:
+			work.append(re.sub('^\s+', '', string, flags=re.UNICODE))
+			sections = []
+			current_section = ''
+			last_chunk = work.pop()
+			for chunk in work:
+				if len(current_section) + len(chunk) + 1 < 1000000:
 				# Spacy requires texts of length no more than 1000000
-	                current_section = current_section + ' ' + chunk
-	            else:
-	                sections.append(current_section)
-	                current_section = chunk
+					current_section = current_section + ' ' + chunk
+				else:
+					sections.append(current_section)
+					current_section = chunk
 
-	        current_section = current_section + last_chunk
-	        sections.append(re.sub(u'^\s+', '', current_section, flags=re.UNICODE))
+			current_section = current_section + last_chunk
+			sections.append(re.sub('^\s+', '', current_section, flags=re.UNICODE))
 
-	        section_counter = 0
-	        for section in sections:
-	            doc = nlp(unicode(section))
-	            parsed = [(w.text, w.tag_, w.lemma_) for w in doc]
+			section_counter = 0
+			for section in sections:
+				doc = nlp(str(section))
+				parsed = [(w.text, w.tag_, w.lemma_) for w in doc]
+				sentences = []
+				sent = []
+				for token in parsed:
+					text = token[0]
+					pos = token[1]
+					lemma = token[2].lower()
 
-	            sentences = []
-	            sent = []
-	            for token in parsed:
-	                text = token[0]
-	                pos = token[1]
-	                lemma = token[2].lower()
-
-	                if re.match(u'PUNCT', pos, flags=re.UNICODE) and re.match(ur'[\.\!\?]', text, flags=re.UNICODE):
-	                    sent.append(lemma)
-	                    sentences.append(sent)
-	                    sent = []
-
-	                else:
-	                    if not re.match(u'PUNCT', pos, flags=re.UNICODE):
-	                        lemma = re.sub(u'^\W+', '', lemma, flags=re.UNICODE)
-	                        lemma = re.sub(u'\W+$', '', lemma, flags=re.UNICODE)
-
-	                    if re.match(u'\w', pos, flags=re.UNICODE):
-	                        sent.append(lemma)
-	                        if pd.get(lemma):
+					if re.match('PUNCT', pos, flags=re.UNICODE) and re.match(r'[\.\!\?]', text, flags=re.UNICODE):
+						sent.append(lemma)
+						sentences.append(sent)
+						sent = []
+					else:
+						if not re.match('PUNCT', pos, flags=re.UNICODE):
+							lemma = re.sub('^\W+', '', lemma, flags=re.UNICODE)
+							lemma = re.sub('\W+$', '', lemma, flags=re.UNICODE)
+						if re.match('\w', pos, flags=re.UNICODE):
+							sent.append(lemma)
+							if pd.get(lemma):
 								pd[lemma] = pd.get(lemma).add(pos)
-	                        else:
+							else:
 								pd[lemma] = { pos }
-
-	            if len(sent) > 0:
+				if len(sent) > 0:
 					sentences.append(sent)
-	            fn = nfname
-	            if len(sections) > 1:
-	                fn = re.sub('pkl$', str(section_counter) + '.pkl', fn)
-	                section_counter = section_counter + 1
-
-				# print(os.path.join(pickledir, fn))
-	            pickleFile = open(os.path.join(pickledir, fn), 'wb')
-	            pickle.dump(sentences, pickleFile)
+				fn = nfname
+				if len(sections) > 1:
+					fn = re.sub('pkl$', str(section_counter) + '.pkl', fn)
+					section_counter = section_counter + 1
+				pickleFile = open(os.path.join(pickledir, fn), 'wb')
+				pickle.dump(sentences, pickleFile)
 
 pickleFile = open(pos_dict, 'wb')
 pickle.dump(pd, pickleFile)
