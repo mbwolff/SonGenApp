@@ -54,10 +54,12 @@ Here is how you set up the web application:
 
 1. Create a directory and create subdirectories `lib` and `Fievre`. Install this repo as a subdirectory as well.
 2. Change directories to the repo.
-3. Run `scrapeTheatreClassique.py`. This will download the files for plays from the  [Théâtre Classique](http://www.theatre-classique.fr) website and place them in the directory `Fievre`. There are formatting errors in the source data. These errors are easy to fix when this script throws an exception: just edit the source data in `Fievre` and restart.
-4. Run `buildVectorSpace.py`. This will build the word embedding model and save it as `lib/Fievre_model`. It will also build a dictionary file, `lib/pos_dict.pkl`.
+3. Run `scrapeTheatreClassique.py`. This will download the files for plays from the  [Théâtre Classique](http://www.theatre-classique.fr) website and place them in the directory `../Fievre`.
+4. Create a MySQL database by importing `songenapp.sql`. You will need to create two users in MySQL, one to build the database (with `INSERT` and `SELECT` privileges) and one for the web server to access the database (with `SELECT` privileges). You can create these accounts by looking at the parameters set in `buildCorpus.py` and `makeSonnet.py`.
+5. Run `build.Corpus.py`, which inserts all alexandrines from verse plays in `../Fievre` into the `corpus` database along with their IPA transliterations. There are formatting errors in the source data downloaded in `../Fievre`. These errors are easy to fix when this script throws an exception: just edit the source data and restart.
+4. Run `buildVectorSpace.py`. This will build the word embedding model and save it as `lib/Fievre_model`. It will also build the dictionary file `lib/pos_dict.pkl`.
 5. The web application `makeSonnet.py` can now be deployed. I recommend [Gunicorn](https://gunicorn.org) for deployment:
-
 ```
 gunicorn -b localhost:5000 -w 4 -t 120 --preload makeSonnet:app
 ```
+When the server starts up it will first load the word embedding model and vectorize all the verses in the database. This takes a while (about a minute on my 3-year-old MacBook Pro).
