@@ -18,7 +18,6 @@ Here's the procedure:
 
 Here is an example of a generated sonnet:
 
-```
 1. Que l'amour est déchu de son autorité (CREBILLON_CATILINA.xml:351)
 2. Quoi ! Vous feriez cet illustre Molière, (IMBERT_POINSINETMOLIERE.xml:1)
 3. Venir sur son tombeau jurer a votre père (CREBILLON_ELECTRE.xml:1102)
@@ -36,7 +35,6 @@ Here is an example of a generated sonnet:
 12. Voudrait charger sa main de cet horrible emploi ? (CREBILLON_IDOMENEE.xml:1218)
 13. Et que sur ce penchant il se fasse une loi... (CORNEILLET_PYRRHUS.xml:35)
 14. Comme vous gai, brillant, aimable ; mais volage ; (MARCHADIER_PLAISIR.xml:145)
-```
 
 At the end of each verse is a reference to its source text and line number, which can be referenced in the [Théâtre Classique](http://www.theatre-classique.fr).
 
