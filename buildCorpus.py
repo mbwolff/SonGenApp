@@ -7,10 +7,6 @@ permitted in any medium without royalty provided the copyright notice and
 this notice are preserved. This file is offered as-is, without any warranty.
 """
 
-# There are formatting errors in the source data. These are easy to fix
-# when this script throws an exception: just edit the source data and
-# restart.
-
 import sys
 import re
 import os

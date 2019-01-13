@@ -27,8 +27,8 @@ if __name__ == "__main__":
 
 model_file = '../lib/Fievre_model'
 pkl_dict = '../lib/pos_dict.pkl'
-VectorizedCorpusFile = '../lib/VectorizedCorpus.pkl'
-VectorizerFile = '../lib/Vectorizer.pkl'
+#VectorizedCorpusFile = '../lib/VectorizedCorpus.pkl'
+#VectorizerFile = '../lib/Vectorizer.pkl'
 number_of_options = 100
 loop_max = 50
 no_phonemes = 3
@@ -45,7 +45,7 @@ posd = pickle.load(pickleFile)
 nlp = spacy.load('fr_core_news_sm')
 
 print('{timestamp} -- start loading corpus from MySQL'.format(timestamp=datetime.utcnow().isoformat()))
-global_corpus = list()
+corpus = list()
 cnx = mysql.connector.connect(
   host=host,
   user=mysql_user,
@@ -58,7 +58,7 @@ cursor = cnx.cursor()
 query = ('SELECT * FROM corpus')
 cursor.execute(query)
 for (id, fname, ln, verse, ipa) in cursor:
-    global_corpus.append( (id, fname, ln, verse, ipa) )
+    corpus.append( (id, fname, ln, verse, ipa) )
 cursor.close()
 cnx.close()
 
@@ -67,7 +67,7 @@ vectorizer = TfidfVectorizer(
     ngram_range=(1, 2),
     token_pattern=r'\b\w+\b',
     min_df=1)
-g_vectorized_corpus = vectorizer.fit_transform([vers[3] for vers in global_corpus])
+vectorized_corpus = vectorizer.fit_transform([vers[3] for vers in corpus])
 
 print('{timestamp} -- everything is loaded'.format(timestamp=datetime.utcnow().isoformat()))
 #raise ValueError('Check corpus and vecotrized corpus')
@@ -109,7 +109,6 @@ def makeSonnet():
 @app.route('/again', methods=['GET', 'POST'])
 def again():
     error = None
-
     return redirect(url_for('start'), code=302)
 
 def select_a_verse(string):
@@ -127,10 +126,8 @@ def select_a_verse(string):
     cursor.execute(query, ('%' + string + '%',))
     for (id, verse) in cursor:
         verses.append( (id, verse) )
-
     cursor.close()
     cnx.close()
-
     return render_template('setParams.html', verses=verses)
 
 def make_the_sonnet(pos, neg, index):
@@ -138,14 +135,12 @@ def make_the_sonnet(pos, neg, index):
     global no_phonemes
     used_verses = list()
     vers = grabVerse(index)
-
     initial_index = index
     line = 0
     rime = list()
     tv = ''
-
     verses = list()
-    vectorized_corpus = g_vectorized_corpus
+#    vectorized_corpus = g_vectorized_corpus
     while line < 14:
         if line == 0: # first verse
             gender = False
@@ -206,7 +201,6 @@ def make_the_sonnet(pos, neg, index):
             print('\'' + vers[3] + '\'')
             print('\'' + vers[4] + '\'')
             print()
-
     return render_template('sonnet.html', pos=pos, neg=neg,
         no_verses_corpus=initial_index, verses=verses)
 
@@ -224,7 +218,6 @@ def transform_verse(assertion, pos, neg):
                 if posd[item[0]]:
                     psd = next(iter(posd[item[0]])).split('__')[0]
                     hits.append(item[0])
-
             if len(hits) > 0:
                 new_words.append(hits[0])
             else:
@@ -247,17 +240,14 @@ def displayVerse(indices, vectorized_tv, vectorized_corpus, used_verses):
 def new_rhyme(index,r):
     global no_phonemes
     gender = not r[index-1][2]
-
     query = list()
     basequery = 'SELECT id FROM corpus WHERE '
     if gender == False:
         query.append(( 'LOWER(verse) NOT REGEXP %s', 'e[[:space:]]*[[:punct:]]*[[:space:]]*$' ))
     else:
         query.append(( 'LOWER(verse) REGEXP %s', 'e[[:space:]]*[[:punct:]]*[[:space:]]*$' ))
-
     for i in range(0, index):
         query.append(( 'ipa NOT REGEXP %s', str(r[i][0]) + '[[:space:]]*[[:punct:]]*[[:space:]]*$' ))
-
     sql = list()
     data = list()
     for q in query:
@@ -265,7 +255,6 @@ def new_rhyme(index,r):
         data.append(q[1])
     qstring = (basequery + ' AND '.join(sql))
 #    print(data)
-
     cnx = mysql.connector.connect(
         host=host,
         user=mysql_user,
@@ -276,39 +265,30 @@ def new_rhyme(index,r):
     )
     cursor = cnx.cursor()
     cursor.execute(qstring, tuple(data))
-
     indices = list()
     for (id) in cursor:
         indices.append(int(id[0]))
-
     cursor.close()
     cnx.close()
-
     return indices
 
 def check_verse(index,r):
     global no_phonemes
     query = list()
-
     basequery = 'SELECT id FROM corpus WHERE '
     query.append(( 'ipa REGEXP %s', str(r[index][0]) + '[[:space:]]*$' ))
     if r[index][2] == False:
         query.append(( 'LOWER(verse) NOT REGEXP %s', 'e[[:space:]]*[[:punct:]]*[[:space:]]*$' ))
     else:
         query.append(( 'LOWER(verse) REGEXP %s', 'e[[:space:]]*[[:punct:]]*[[:space:]]*$' ))
-
     for w in r[index][1]:
         query.append(( 'LOWER(verse) NOT REGEXP %s', str(w) + '[[:space:]]*[[:punct:]]*[[:space:]]*$'))
-
     sql = list()
     data = list()
     for q in query:
         sql.append(q[0])
         data.append(q[1])
     qstring = (basequery + ' AND '.join(sql))
-#    print('Check verse: ' + qstring.encode('utf-8'))
-#    print(data)
-
     cnx = mysql.connector.connect(
         host=host,
         user=mysql_user,
@@ -319,14 +299,11 @@ def check_verse(index,r):
     )
     cursor = cnx.cursor()
     cursor.execute(qstring, tuple(data))
-
     indices = list()
     for (id) in cursor:
         indices.append(int(id[0]))
-
     cursor.close()
     cnx.close()
-
     return indices
 
 def addNewRime(r, sound):
@@ -358,7 +335,6 @@ def nocache(view):
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '-1'
         return response
-
     return update_wrapper(no_cache, view)
 
 def getCorpus():
@@ -376,7 +352,6 @@ def getCorpus():
     cursor.execute(query)
     for (id, fname, ln, verse, ipa) in cursor:
         corpus.append( (id, fname, ln, verse, ipa) )
-
     cursor.close()
     cnx.close()
     return corpus
@@ -407,7 +382,6 @@ def grabVerse(i):
     for (id, fname, ln, verse, ipa) in cursor:
         vers = ( id, fname, ln, verse, ipa )
         break
-
     cursor.close()
     cnx.close()
     return vers

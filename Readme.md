@@ -40,7 +40,23 @@ Here is an example of a generated sonnet:
 
 At the end of each verse is a reference to its source text and line number, which can be referenced in the [Théâtre Classique](http://www.theatre-classique.fr).
 
-The code in `makeSonnet.py` is the web application built with [Flask](http://flask.pocoo.org) and other modules. I recommend [Gunicorn](https://gunicorn.org) for deployment:
+## Setup
+
+You will need to install the following Python modules (the current repo works for Python 3.7):
+
+* epitran
+* xml.etree.ElementTree
+* mysql.connector
+* spacy (with `fr_core_news_sm`)
+* gensim
+
+Here is how you set up the web application:
+
+1. Create a directory and create subdirectories `lib` and `Fievre`. Install this repo as a subdirectory as well.
+2. Change directories to the repo.
+3. Run `scrapeTheatreClassique.py`. This will download the files for plays from the  [Théâtre Classique](http://www.theatre-classique.fr) website and place them in the directory `Fievre`. There are formatting errors in the source data. These errors are easy to fix when this script throws an exception: just edit the source data in `Fievre` and restart.
+4. Run `buildVectorSpace.py`. This will build the word embedding model and save it as `lib/Fievre_model`. It will also build a dictionary file, `lib/pos_dict.pkl`.
+5. The web application `makeSonnet.py` can now be deployed. I recommend [Gunicorn](https://gunicorn.org) for deployment:
 
 ```
 gunicorn -b localhost:5000 -w 4 -t 120 --preload makeSonnet:app
