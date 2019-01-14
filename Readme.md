@@ -49,6 +49,7 @@ You will need to install the following Python modules (the current repo works fo
 * mysql.connector
 * spacy (with `fr_core_news_sm`)
 * gensim
+* flask
 
 Here is how you set up the web application:
 
