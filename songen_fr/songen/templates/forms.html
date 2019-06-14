@@ -1,0 +1,7 @@
+{% macro input(label, name, value='', type='text', size=25) -%}
+    <p>{{ label }} : <input type="{{ type }}" name="{{ name }}" value="{{
+        value|e }}" size="{{ size }}"></p>
+{%- endmacro %}
+{% macro hidden_input(name, value='') -%}
+    <input type="hidden" name="{{ name }}" value="{{ value|e }}" >
+{%- endmacro %}

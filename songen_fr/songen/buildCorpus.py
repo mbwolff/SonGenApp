@@ -15,16 +15,15 @@ import warnings
 import xml.etree.ElementTree as ET
 import mysql.connector
 import io
+from config import vowels, epi
 
-sourcedir = '../Fievre'
-
-epi = epitran.Epitran('fra-Latn')
+sourcedir = '../../../Fievre'
 
 mydb = mysql.connector.connect(
   host="localhost",
   user="songenappmaker",
   passwd="make_songenapp",
-  database="songenapp",
+  database="songen",
   charset='utf8',
   use_unicode=True
 )
@@ -34,10 +33,14 @@ mycursor.execute('SET NAMES UTF8;')
 
 ### BEGIN functions and classes
 def add2corpus(corpus, string, fname, ln):
-    stripped = re.sub('[^\w\s]+', '', string)
-    stripped = re.sub('\s*$', ' ', stripped)
+    s = re.sub('\-+', '-', string)
+#    s = re.sub('\-t\-', ' t', s)
+#    s = re.sub(' t ', ' t', s)
+    s = re.sub('\s*[\.,:;\'\"\u00AB\u00BB\?\!\(\)]+', '', s)
+#    s = re.sub('\s+', ' ', s)
+    s = re.sub('\W*$', ' ', s)
 
-    ipa = epi.transliterate(stripped)
+    ipa = epi.transliterate(s)
 #    if type(string) == type(str()):
 #        string = string.decode('utf-8')
     l = (
@@ -55,7 +58,7 @@ def count_vowels(v):
         s = re.sub('[^\w\s]+', '', v)
         s = re.sub('\s*$', ' ', s)
         ipa = epi.transliterate(s)
-        count = len(re.findall('[\u0069\u0079\u0268\u0289\u026F\u0075\u0065\u00F8\u0258\u0275\u006F\u0259\u025B\u0153\u025C\u0254\u00E6\u0250\u0061\u0276\u0251\u0252]', ipa))
+        count = len(re.findall(vowels, ipa))
         return count
     except:
         raise ValueError('Verse: ' + str(v))
@@ -77,7 +80,7 @@ def readFile(fname, corpus):
                 id = int(line.attrib['id'])
             except:
                 raise ValueError('Verse: ' + verse)
-            if not verse or count_vowels(verse) < 10 or len(verse) > 128:
+            if not verse or count_vowels(verse) != 12:
                 continue
             elif id == ln:
                 string.append(verse)
@@ -101,7 +104,7 @@ for fname in os.listdir(sourcedir):
         eprint('Loading ' + fname)
         readFile(fname, corpus)
 
-sql = u'INSERT INTO corpus (fname,ln,verse,ipa) VALUES (%s,%s,%s,%s)'
+sql = u'INSERT INTO français (fname,ln,verse,ipa) VALUES (%s,%s,%s,%s)'
 for datum in corpus:
     try:
         mycursor.execute(sql, datum)

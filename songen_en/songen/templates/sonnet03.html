@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Invent a Sonnet{% endblock title %}
+{% block content %}
+    <h1>Invent a Sonnet</h1>
+    <p>Enter terms for the analogy in the word vector space.</p>
+    <form method='post' action='/makeSonnet'>
+    <p>Positive term : <input type='text' name='pos' value='{{ pos }}' size='20'></p>
+    <p>Negative term : <input type='text' name='neg' value='{{ neg }}' size='20'></p>
+    {% if message %}
+      <p class='message'>{{ message }}</P>
+    {% endif %}
+    <p><input type="submit" value="Send"></p>
+    {% if verses|length > 1 %}
+      <p><input type='radio' name='revise' value='0' checked> Do not revise anything before verse {{ verses|length }}</p>
+    {% endif %}
+    <ol>
+    {% for v in verses %}
+      <li class='parent'>
+      {% if loop.last %}
+        <input type="text" name="last_verse" value="{{ v[0]|e }}" size="40">
+      {% else %}
+        {{ v[0] }}
+      {% endif %}
+      (<a href='http://www.gutenberg.org/ebooks/{{ v[1] }}' target='_new'>{{ v[2] }}: {{ v[3] }})</a>
+      {% if not loop.last %}
+        <input type='radio' name='revise' value='{{ v[5] }}'> [Revise from this verse onward]
+      {% endif %}
+      <div class='child'>{{ v[4] }} [{{ v[7] }}, {{ v[8] }}]</div>
+      {% if loop.index in [4, 8, 11] %}
+        <p></p>
+      {% endif %}
+        </li>
+    {% else %}
+      <li><em>no verses found</em></li>
+    {% endfor %}
+    </ol>
+    <p><input type="submit" value="Send"></p>
+    {% if verses|length < 14 %}
+      <p>Select the next verse:</p>
+      {% for opt in options %}
+        <input type='radio' name='chosen' value='{{ opt[0] }}'> {{ opt[1] }}<br>
+      {% else %}
+        <p>No options available!</p>
+      {% endfor %}
+    {% endif%}
+    </form>
+    <p><a href="/again">Invent another sonnet!</a></p>
+{% endblock content %}

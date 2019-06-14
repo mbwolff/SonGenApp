@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    .child {
+      display: none;
+    }
+    .parent:hover .child, .parent.hover .child {
+        display: block;
+        color: green;
+        font-style: italic;
+    }
+    .message {
+      color: red;
+      font-style: bold;
+    }
+  </style>
+<head>
+    {% block head %}
+    <title>{% block title %}Make a sonnet{% endblock %}</title>
+    {% endblock %}
+</head>
+<body>
+    <div id="content">{% block content %}
+      {% endblock content%}</div>
+</body>
+</html>
