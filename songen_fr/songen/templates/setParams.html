@@ -11,7 +11,7 @@
 
     {{ forms.hidden_input('last_verse', 0) }}
     {{ forms.hidden_input('message', 0) }}
-    <input type="submit" value="Send">
+    <input type="submit" value="Envoyer">
     <p>Sélectionner un vers:</p>
     {% for v in options %}
       <input type='radio' name='chosen' value='{{ v[0] }}'
