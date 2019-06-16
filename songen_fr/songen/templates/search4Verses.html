@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% import 'forms.html' as forms %}
 {% block head %}
-<title>{% block title %}Search for a string...{% endblock %}</title>
+<title>{% block title %}Chercher une chaîne de caractères...{% endblock %}</title>
 {% endblock %}
 {% block content %}
   <form method="post" action="/getVerses">
-    {{ forms.input('Enter a string for a list of verses (only alphanumeric characters, case insensitive)', 'string', 'amour') }}
+    {{ forms.input('Entrer une chaîne de caractères pour chercher une liste de vers (caractères alphanumériques uniquement, insensible à la casse)', 'string', 'amour') }}
     <input type="submit" value="Send">
   </form>
 {% endblock content%}

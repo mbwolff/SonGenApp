@@ -1,20 +1,18 @@
 {% extends "base.html" %}
 {% import 'forms.html' as forms %}
 {% block head %}
-<title>{% block title %}Fill in the form{% endblock %}</title>
+<title>{% block title %}Remplir le formulaire{% endblock %}</title>
 {% endblock %}
 {% block content %}
   <form method="post" action="/makeSonnet">
-    <p>Enter terms for the analogy in the word vector space.</p>
-    {{ forms.input('Positive term', 'pos', 'femme') }}
-    {{ forms.input('Negative term', 'neg', 'homme') }}
-    <p>
-      It will take a while to generate your sonnet (there are over 850,000 verses to choose from and the constraints of rhyme and analogy are rigorous). Please be patient!
-    </p>
+    <p>Entrer des terms pour l'analogie dans l'espace vectoriel de mots.</p>
+    {{ forms.input('Terme positif', 'pos', 'femme') }}
+    {{ forms.input('Terme négatif', 'neg', 'homme') }}
+
     {{ forms.hidden_input('last_verse', 0) }}
     {{ forms.hidden_input('message', 0) }}
     <input type="submit" value="Send">
-    <p>Select a verse:</p>
+    <p>Sélectionner un vers:</p>
     {% for v in options %}
       <input type='radio' name='chosen' value='{{ v[0] }}'
       {% if loop.first %}
@@ -22,7 +20,7 @@
       {% endif %}
       > {{ v[1] }}<br/>
     {% else %}
-      <p>Could not find any verses! <a href="/start">Try again.</a></p>
+      <p>Aucun vers n'a été trouvé! <a href="/start">Relancer.</a></p>
     {% endfor %}
     <p><input type="submit" value="Send"></p>
   </form>

@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Invent a Sonnet{% endblock title %}
+{% block title %}Inventer un sonnet{% endblock title %}
 {% block content %}
-    <h1>Invent a Sonnet</h1>
-    <p>Enter terms for the analogy in the word vector space.</p>
+    <h1>Inventer un sonnet</h1>
+    <p>Entrer des termes pour l'analogie dans l'espace vectoriel de mots.</p>
     <form method='post' action='/makeSonnet'>
-    <p>Positive term : <input type='text' name='pos' value='{{ pos }}' size='20'></p>
-    <p>Negative term : <input type='text' name='neg' value='{{ neg }}' size='20'></p>
+    {{ forms.input('Terme positif', 'pos', 'femme') }}
+    {{ forms.input('Terme négatif', 'neg', 'homme') }}
     {% if message %}
       <p class='message'>{{ message }}</P>
     {% endif %}
-    <p><input type="submit" value="Send"></p>
+    <p><input type="submit" value="Envoyer"></p>
     {% if verses|length > 1 %}
-      <p><input type='radio' name='revise' value='0' checked> Do not revise anything before verse {{ verses|length }}</p>
+      <p><input type='radio' name='revise' value='0' checked> Ne rien réviser avant le vers {{ verses|length }}</p>
     {% endif %}
     <ol>
     {% for v in verses %}
@@ -23,7 +23,7 @@
       {% endif %}
       (<a href='http://www.theatre-classique.fr/pages/programmes/edition.php?t=../documents/{{ v[1] }}' target='_new'>{{ v[3] }}: {{ v[2] }})</a>
       {% if not loop.last %}
-        <input type='radio' name='revise' value='{{ v[5] }}'> [Revise from this verse onward]
+        <input type='radio' name='revise' value='{{ v[5] }}'> [Réviser à partir de ce vers]
       {% endif %}
       <div class='child'>{{ v[4] }} [{{ v[7] }}, {{ v[8] }}]</div>
       {% if loop.index in [4, 8, 11] %}
@@ -31,18 +31,18 @@
       {% endif %}
         </li>
     {% else %}
-      <li><em>no verses found</em></li>
+      <li><em>Aucun vers trouvé.</em></li>
     {% endfor %}
     </ol>
     <p><input type="submit" value="Send"></p>
     {% if verses|length < 14 %}
-      <p>Select the next verse:</p>
+      <p>Sélectionner le prochain vers:</p>
       {% for opt in options %}
         <input type='radio' name='chosen' value='{{ opt[0] }}'> {{ opt[1] }}<br>
       {% else %}
-        <p>No options available!</p>
+        <p>Plus de vers possible!</p>
       {% endfor %}
     {% endif%}
     </form>
-    <p><a href="/again">Invent another sonnet!</a></p>
+    <p><a href="/again">Inventer un autre sonnet!</a></p>
 {% endblock content %}
