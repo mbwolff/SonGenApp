@@ -13,7 +13,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import re
 import string
 import pickle
-from .treetagger import TreeTagger
+#from .treetagger import TreeTagger
 import epitran
 import gensim
 import random
@@ -266,6 +266,8 @@ def getRhyme(ipa):
 def transform_verse(assertion, pos, neg):
     new_words = []
     for w in tag(assertion):
+        eprint('Transforming...')
+        eprint(w)
         try:
             hits = []
             psw = w[1]
@@ -451,11 +453,6 @@ def grabVerse(i):
     cursor.close()
     cnx.close()
     return list(vers) + [ re.sub('\.xml', '', vers[1]) ]
-
-def tag(assertion):
-#    global tagdir
-    tt = TreeTagger(path_to_treetagger=tagdir)
-    return tt.tag(assertion)
 
 def transliterate(string):
 #    global epi

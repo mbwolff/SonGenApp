@@ -130,3 +130,6 @@ dmypy.json
 
 # SonGenApp gensim lib files
 lib/
+
+# songen_fr source files
+Fievre/

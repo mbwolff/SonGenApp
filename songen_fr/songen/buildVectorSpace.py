@@ -10,7 +10,8 @@ this notice are preserved. This file is offered as-is, without any warranty.
 import os
 import pickle
 #import spacy
-import treetaggerwrapper
+#import treetaggerwrapper
+#from .treetagger import TreeTagger
 import re
 import csv
 import logging
@@ -18,13 +19,14 @@ import gensim
 import shutil
 import xml.etree.cElementTree as ET
 from six import iteritems
+from utils import eprint, tag
+from config import tagdir
 
 sourcedir = '../Fievre'
 
-pickledir = 'Fievre_pickled'
+pickledir = '../Fievre_pickled'
 saved = os.path.join('../lib', re.sub('pickled$', 'model', pickledir))
 #pos_dict = os.path.join('../lib', 'pos_dict.pkl')
-tagdir='/usr/local/treetagger'
 
 ### functions and classes
 def getTagged(path):
@@ -43,7 +45,7 @@ class MySentences(object):
 
 ######################
 # nlp = spacy.load('fr_core_news_sm')
-tagger = treetaggerwrapper.TreeTagger(TAGLANG='fr', TAGDIR=tagdir)
+#tagger = treetaggerwrapper.TreeTagger(TAGLANG='fr', TAGDIR=tagdir)
 
 if not os.path.exists(pickledir):
     os.makedirs(pickledir)
@@ -104,12 +106,14 @@ for fname in os.listdir(sourcedir):
 #				parsed = [(w.text, w.tag_, w.lemma_) for w in doc]
 				sentences = list()
 				sent = list()
-				for t in tagger.tag_text(section):
+				for t in tag(section):
+#				for t in tagger.tag_text(section):
+#					eprint(t)
 #				for token in parsed:
 #					text = token[0]
 #					pos = token[1]
 #					lemma = token[2].lower()
-					t = re.split('\t', t)
+#					t = re.split('\t', t)
 					if len(t) < 3:
 						continue
 #					sent.append(tuple(t))
