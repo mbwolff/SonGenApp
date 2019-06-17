@@ -467,20 +467,20 @@ def goodVerse(verse, ipa, line, r, orig_verse, orig_ipa):
     message = None
     lvlw = re.sub('\W+$', '', verse).split().pop()
     if lvlw.lower() in r[setRime(line)][1]:
-        messgae = 'The last word of "' + verse + '" cannot be repeated.'
+        message = 'On ne peut pas répéter le dernier mot de "' + verse + '".'
         return message
     if len(vowels.findall(ipa)) != 12:
-        message = 'Incorrect number of syllables.'
+        message = 'Nombre incorrect de syllabes.'
         return message
     if ipa[-no_phonemes:] == orig_ipa[-no_phonemes:]:
         if lvlw[-1] == 'e' and re.sub('\W+$', '', orig_verse).split().pop()[-1] != 'e':
-            message = 'Final word of "' + verse + '" ends with the letter e but the rhyme is not feminine.'
+            message = 'Le dernier mot de "' + verse + '" se termine avec la lettre <b>e</b> mais la rime est masculine.'
             return message
         elif lvlw[-1] != 'e' and re.sub('\W+$', '', orig_verse).split().pop()[-1] == 'e':
-            message = 'Final word of "' + verse + '" does not end with the letter e but the rhyme is feminine.'
+            message = 'Le dernier mot de "' + verse + '" ne se termine pas avec la lettre <b>e</b> mais la rime est féminine.'
             return message
     else:
-        message = 'The rhyme at the end of "' + verse + '" is incorrect.'
+        message = 'La rime à la fin de "' + verse + '" n\'est pas correcte.'
         return message
     return message
 
