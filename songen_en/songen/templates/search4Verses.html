@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
   <form method="post" action="/getVerses">
-    {{ forms.input('Enter a string for a list of verses (only alphanumeric characters, case insensitive)', 'string', 'love') }}
+    {{ forms.input('Enter a string (case insensitive) for a list of verses', 'string', 'love') }}
     <input type="submit" value="Send">
   </form>
 {% endblock content%}
