@@ -450,7 +450,7 @@ def goodVerse(verse, ipa, line, r, orig_verse, orig_ipa):
     if lvlw.lower() in rime:
         message = 'The last word of "' + verse + '" cannot be repeated.'
         return message
-    if len(vowels.findallp(ipa)) != 10:
+    if len(vowels.findall(ipa)) != 10:
         message = 'Incorrect number of syllables.'
         return message
     elif line > 1 and ipa[-no_pnhonemes:] != orig_ipa[-no_phonemes:]:
