@@ -164,7 +164,8 @@ def make_the_sonnet(pos, neg, chosen, revise, last_verse):
             modified = True
         else:
             eprint('There is a message')
-            rime = verses[-1][6]
+            if line > 0:
+                rime = verses[-1][6]
 
     elif bool(verses) and chosen == 0 and last_verse == verses[-1][0]:
         vers = grabVerse(verses[-1][5])
@@ -449,7 +450,7 @@ def goodVerse(verse, ipa, line, r, orig_verse, orig_ipa):
     if len(vowels.findall(ipa)) != 12:
         message = 'Nombre incorrect de syllabes.'
         return message
-    if ipa[-no_phonemes:] == orig_ipa[-no_phonemes:]:
+    if line > 1 and ipa[-no_phonemes:] == orig_ipa[-no_phonemes:]:
         if lvlw[-1] == 'e' and re.sub('\W+$', '', orig_verse).split().pop()[-1] != 'e':
             message = 'Le dernier mot de "' + verse + '" se termine avec la lettre <b>e</b> mais la rime est masculine.'
             return message

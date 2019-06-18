@@ -23,7 +23,7 @@ import sys
 import mysql.connector
 from datetime import datetime
 from .config import secret_key, model_file, no_phonemes, no_verses, tagdir, epi, IPAV, vowels
-from .utils import eprint, connectMySQL
+from .utils import eprint, connectMySQL, tag
 
 app = Flask(__name__)
 if __name__ == "__main__":
@@ -120,13 +120,12 @@ def make_the_sonnet(pos, neg, chosen, revise, last_verse):
         verses = session['verses']
     rime = None
     line = len(verses)
-    eprint('Line: ' + str(line))
     options = list()
     used_verses = [ v[5] for v in verses ]
     indices = list()
     vers = list()
     chosen = int(chosen)
-    message = 0
+    message = None
     modified = False
     modtitle = ''
     if revise != '0':
@@ -136,8 +135,6 @@ def make_the_sonnet(pos, neg, chosen, revise, last_verse):
                 vers[2] = verses[i][0]
                 vers[3] = transliterate(vers[2])
                 modtitle = verses[i][3]
-                eprint('Revise vers:')
-                eprint(vers)
                 verses = verses[:i]
                 if len(verses) > 0:
                     verses[-1][6] = fixRime(i, verses[-1][6])
@@ -148,26 +145,24 @@ def make_the_sonnet(pos, neg, chosen, revise, last_verse):
     elif bool(verses) and last_verse != verses[-1][0]:
         eprint('Revising...')
         ipa = transliterate(last_verse)
-        rime = verses[-1][6]
-        v = verses.pop()
+        v = verses[-1]
+        rime = v[6]
+        verses.pop()
 #        vers = [ v[3], v[1], v[2], v[0], ipa ]
         vers = grabVerse(v[5])
         line = len(verses)
-        eprint('Before goodverse')
-        bv = goodVerse(last_verse, ipa, line, verses[-1][6], v[0], vers[3])
+        message = goodVerse(last_verse, ipa, line, rime, v[0], vers[3])
         # def goodVerse(verse, ipa, line, r, orig_verse, orig_ipa):
 
-        if bv:
-#            vers[4] = re.sub('\u0259\s*$', ' ', transliterate(v[0]))
-#            if len(verses) > 0:
-#                verses[-1][5] = fixRime(line, verses[-1][5])
-            message = bv
-        elif not message:
+        if not message:
             vers[2] = last_verse
             vers[3] = ipa
             if len(verses) > 0:
                 verses[-1][6] = fixRime(line, verses[-1][6])
             modified = True
+        else:
+            if line > 0:
+                rime = verses[-1][6]
 
     elif bool(verses) and chosen == 0 and last_verse == verses[-1][0]:
         vers = grabVerse(verses[-1][5])
@@ -248,8 +243,6 @@ def make_the_sonnet(pos, neg, chosen, revise, last_verse):
     if len(indices) > 0:
         options = getOptions(indices, vectorized_tv, vectorized_corpus, used_verses)
 
-    eprint('Verse:')
-    eprint(verses[-1])
     return render_template('sonnet.html', pos=pos, neg=neg, verses=verses, options=options, message=message)
 
 def getRhyme(ipa):
@@ -259,8 +252,6 @@ def getRhyme(ipa):
 def transform_verse(assertion, pos, neg):
     new_words = []
     for w in tag(assertion):
-        eprint('Transforming...')
-        eprint(w)
         try:
             hits = []
             for item in model.wv.most_similar(positive=[pos] + [w[2]], negative=[neg]):
@@ -291,7 +282,6 @@ def displayVerse(indices, vectorized_tv, vectorized_corpus, used_verses):
             match = index + 1
             previous.append(match)
             count = count + 1
-            eprint('Count displayVerse: ' + str(count))
     if len(previous) > 1:
         match = previous[-1]
         return grabVerse(match)
@@ -369,7 +359,6 @@ def addLW2rime(i,v,r):
     try:
         lw = re.sub(r'[^\w]+$', '', v)
         lw = lw.lower().split().pop()
-        eprint('LW: ' + lw)
     except:
         lw = 'NONE'
         eprint('v:')
@@ -448,11 +437,6 @@ def getMetadata(gid):
     cnx.close()
     return meta[0], re.sub('\t', ' ', meta[1])
 
-def tag(assertion):
-    global tagdir
-    tt = TreeTagger(path_to_treetagger=tagdir)
-    return tt.tag(assertion)
-
 def transliterate(string):
     global epi
     stripped = re.sub('[^\w\s]+', '', string)
@@ -462,13 +446,14 @@ def transliterate(string):
 def goodVerse(verse, ipa, line, r, orig_verse, orig_ipa):
     message = None
     lvlw = re.sub('\W+$', '', verse).split().pop()
-    if lvlw.lower() in r[setRime(line)][1]:
-        messgae = 'The last word of "' + verse + '" cannot be repeated.'
+    rime = r[setRime(line)][1][:-1]
+    if lvlw.lower() in rime:
+        message = 'The last word of "' + verse + '" cannot be repeated.'
         return message
-    if len(vowels.findall(ipa)) != 10:
+    if len(vowels.findallp(ipa)) != 10:
         message = 'Incorrect number of syllables.'
         return message
-    elif ipa[-no_phonemes:] != orig_ipa[-no_phonemes:]:
+    elif line > 1 and ipa[-no_pnhonemes:] != orig_ipa[-no_phonemes:]:
         message = 'The rhyme at the end of "' + verse + '" is incorrect.'
         return message
     return message
@@ -486,7 +471,6 @@ def setRime(line):
     return n
 
 def fixRime(l, r):
-    eprint('line = ' + str(l))
     if l in [0, 1, 8, 10, 11]:
         r.pop()
     elif l in [2, 5, 6]:
@@ -499,6 +483,4 @@ def fixRime(l, r):
         r[4][1].pop()
     else: # l in [13]
         r[3][1].pop()
-    eprint('new rime')
-    eprint(r)
     return r
