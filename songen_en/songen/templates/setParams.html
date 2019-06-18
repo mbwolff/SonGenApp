@@ -8,9 +8,7 @@
     <p>Enter terms for the analogy in the word vector space.</p>
     {{ forms.input('Positive term', 'pos', 'woman') }}
     {{ forms.input('Negative term', 'neg', 'man') }}
-    <p>
-      It will take a while to generate your sonnet (there are over 850,000 verses to choose from and the constraints of rhyme and analogy are rigorous). Please be patient!
-    </p>
+    
     {{ forms.hidden_input('last_verse', 0) }}
     {{ forms.hidden_input('message', 0) }}
     <input type="submit" value="Send">
