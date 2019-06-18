@@ -12,7 +12,7 @@ import json
 import os
 import pickle
 #import treetaggerwrapper
-from .treetagger import TreeTagger
+from treetagger import TreeTagger
 import re
 import csv
 import logging

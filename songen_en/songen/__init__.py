@@ -22,7 +22,7 @@ import scipy
 import sys
 import mysql.connector
 from datetime import datetime
-from .config import secret_key, model_file, number_of_options, no_phonemes, no_verses, tagdir, epi, IPAV, vowels
+from .config import secret_key, model_file, no_phonemes, no_verses, tagdir, epi, IPAV, vowels
 from .utils import eprint, connectMySQL
 
 app = Flask(__name__)
@@ -150,13 +150,11 @@ def make_the_sonnet(pos, neg, chosen, revise, last_verse):
         ipa = transliterate(last_verse)
         rime = verses[-1][6]
         v = verses.pop()
-        eprint('The verse!')
-        eprint(v)
 #        vers = [ v[3], v[1], v[2], v[0], ipa ]
         vers = grabVerse(v[5])
         line = len(verses)
         eprint('Before goodverse')
-        bv = goodVerse(last_verse, ipa, line, v[6], v[0], vers[3])
+        bv = goodVerse(last_verse, ipa, line, verses[-1][6], v[0], vers[3])
         # def goodVerse(verse, ipa, line, r, orig_verse, orig_ipa):
 
         if bv:
@@ -261,10 +259,11 @@ def getRhyme(ipa):
 def transform_verse(assertion, pos, neg):
     new_words = []
     for w in tag(assertion):
+        eprint('Transforming...')
+        eprint(w)
         try:
             hits = []
-            psw = w[1]
-            for item in model.wv.most_similar(positive=[pos] + [w[2]], negative=[neg], topn=number_of_options):
+            for item in model.wv.most_similar(positive=[pos] + [w[2]], negative=[neg]):
                 hits.append(item[0])
             if len(hits) > 0:
                 new_words.append(hits[0])

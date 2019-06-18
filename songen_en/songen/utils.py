@@ -25,7 +25,7 @@ def connectMySQL():
     )
     return cnx
 
-def tag(assertion):
+def tag(string):
 #    global tagdir
     tt = TreeTagger(path_to_treetagger=tagdir)
-    return tt.tag(assertion)
+    return tt.tag(string)

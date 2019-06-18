@@ -5,8 +5,8 @@
     <h1>Inventer un sonnet</h1>
     <p>Entrer des termes pour l'analogie dans l'espace vectoriel de mots.</p>
     <form method='post' action='/makeSonnet'>
-      <p>Term positif : <input type='text' name='pos' value='{{ pos }}' size='10'></p>
-      <p>Term positif : <input type='text' name='neg' value='{{ neg }}' size='10'></p>
+      <p>Terme positif : <input type='text' name='pos' value='{{ pos }}' size='10'></p>
+      <p>Terme négatif : <input type='text' name='neg' value='{{ neg }}' size='10'></p>
     {% if message %}
       <p class='message'>{{ message }}</P>
     {% endif %}
