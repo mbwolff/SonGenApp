@@ -69,15 +69,11 @@ for i in metadata:
 	elif i['Language'] and i['Language'][0] == 'English':
 		eprint('Attempting ' + i['gd-num-padded'])
 		text = retrieve_one(zfile, i['gd-path'])
-#		tags = tagger.tag_text(text)
 		sentences = list()
 		sent = list()
 		for t in tag(text):
-#		for t in tagger.tag_text(text):
-#			t = re.split('\t', t)
 			if len(t) < 3:
 				continue
-#			sent.append(t[2].lower())
 			sent.append(tuple(t))
 			if t[1] == 'SENT':
 				sentences.append(sent)

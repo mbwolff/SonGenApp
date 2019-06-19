@@ -1,4 +1,4 @@
-# SonGen
+# SonGenApp
 ## A sonnet generator
 
 This code will be presented at the [2019 Electronic Literature Organization's conference in Cork, Ireland](http://elo2019.ucc.ie).
