@@ -1,4 +1,4 @@
-# SonGen français
+# SonGenApp français
 ## A French sonnet generator
 ### Based on [this contribution](https://github.com/mbwolff/Classique-inconnu) to [NaNoGenMo 2018](https://github.com/NaNoGenMo/2018)
 
