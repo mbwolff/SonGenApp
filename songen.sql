@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 16, 2019 at 07:34 PM
+-- Generation Time: Jun 19, 2019 at 12:51 AM
 -- Server version: 5.7.25
 -- PHP Version: 7.1.23
 
@@ -34,7 +34,6 @@ CREATE TABLE `english` (
   `id` int(6) UNSIGNED NOT NULL,
   `gid` mediumint(8) UNSIGNED NOT NULL,
   `verse` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tags` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ipa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
