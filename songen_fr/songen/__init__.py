@@ -165,7 +165,8 @@ def make_the_sonnet(pos, neg, chosen, revise, last_verse):
         else:
             eprint('There is a message')
             if line > 0:
-                rime = verses[-1][6]
+#                rime = verses[-1][6]
+                rime = fixRime(line, verses[-1][6])
 
     elif bool(verses) and chosen == 0 and last_verse == verses[-1][0]:
         vers = grabVerse(verses[-1][5])

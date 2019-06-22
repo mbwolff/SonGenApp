@@ -157,12 +157,12 @@ def make_the_sonnet(pos, neg, chosen, revise, last_verse):
         if not message:
             vers[2] = last_verse
             vers[3] = ipa
-            if len(verses) > 0:
+            if line > 0:
                 verses[-1][6] = fixRime(line, verses[-1][6])
             modified = True
         else:
             if line > 0:
-                rime = verses[-1][6]
+                rime = fixRime(line, verses[-1][6])
 
     elif bool(verses) and chosen == 0 and last_verse == verses[-1][0]:
         vers = grabVerse(verses[-1][5])
@@ -240,6 +240,7 @@ def make_the_sonnet(pos, neg, chosen, revise, last_verse):
         used_verses.append(vers[0])
     verses.append([ vers[2], vers[1], author, title, tv, vers[0], rime, pos, neg ])
     session['verses'] = verses
+    eprint(verses[-1])
     if len(indices) > 0:
         options = getOptions(indices, vectorized_tv, vectorized_corpus, used_verses)
 
@@ -420,7 +421,9 @@ def grabVerse(i):
     vers = cursor.fetchone()
     cursor.close()
     cnx.close()
-    return list(vers)
+    nv = list(vers)
+    nv[3] = re.sub('\W+$', '', nv[3])
+    return nv
 
 def getMetadata(gid):
     if gid == 0:
@@ -435,7 +438,7 @@ def getMetadata(gid):
         break
     cursor.close()
     cnx.close()
-    return meta[0], re.sub('\t', ' ', meta[1])
+    return meta[0], re.sub('\\\\t', ' ', meta[1])
 
 def transliterate(string):
     global epi
@@ -455,6 +458,8 @@ def goodVerse(verse, ipa, line, r, orig_verse, orig_ipa):
         return message
     elif line > 1 and ipa[-no_phonemes:] != orig_ipa[-no_phonemes:]:
         message = 'The rhyme at the end of "' + verse + '" is incorrect.'
+        eprint(ipa + '.')
+        eprint(orig_ipa + '.')
         return message
     return message
 
