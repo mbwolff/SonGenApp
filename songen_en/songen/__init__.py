@@ -453,7 +453,7 @@ def goodVerse(verse, ipa, line, r, orig_verse, orig_ipa):
     if len(vowels.findall(ipa)) != 10:
         message = 'Incorrect number of syllables.'
         return message
-    elif line > 1 and ipa[-no_pnhonemes:] != orig_ipa[-no_phonemes:]:
+    elif line > 1 and ipa[-no_phonemes:] != orig_ipa[-no_phonemes:]:
         message = 'The rhyme at the end of "' + verse + '" is incorrect.'
         return message
     return message
