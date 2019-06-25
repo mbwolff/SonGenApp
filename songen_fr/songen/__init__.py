@@ -256,7 +256,7 @@ def transform_verse(assertion, pos, neg):
     for w in tag(assertion):
         try:
             hits = []
-            for item in model.wv.most_similar(positive=[pos] + [w[2]], negative=[neg]):
+            for item in model.wv.most_similar_cosmul(positive=[pos] + [w[2]], negative=[neg]):
                 hits.append(item[0])
             if len(hits) > 0:
                 new_words.append(hits[0])
