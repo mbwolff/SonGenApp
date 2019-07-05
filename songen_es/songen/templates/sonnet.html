@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Inventar un soneto{% endblock title %}
+{% block content %}
+    <h1>Inventar un soneto</h1>
+    <p>Introduzca los términos para la analogía en el espacio vectorial de las palabras.</p>
+    <form method='post' action='/makeSonnet'>
+    <p>Término positivo : <input type='text' name='pos' value='{{ pos }}' size='20'></p>
+    <p>Término negativo : <input type='text' name='neg' value='{{ neg }}' size='20'></p>
+    {% if message %}
+      <p class='message'>{{ message }}</P>
+    {% endif %}
+    <p><input type="submit" value="Enviar"></p>
+    {% if verses|length > 1 %}
+      <p><input type='radio' name='revise' value='0' checked> No edites nada antes del verso {{ verses|length }}</p>
+    {% endif %}
+    <ol>
+    {% for v in verses %}
+      <li class='parent'>
+      {% if loop.last %}
+        <input type="text" name="last_verse" value="{{ v[0]|e }}" size="40">
+      {% else %}
+        {{ v[0] }}
+      {% endif %}
+      <a href='https://github.com/bncolorado/CorpusSonetosSigloDeOro/blob/master/{{ v[10] }}/{{ v[11] }}' target='_new'>({{ v[3] }}: {{ v[4] }} v. {{ v[1] }})</a>
+      {% if not loop.last %}
+        <input type='radio' name='revise' value='{{ v[6] }}'> [Repaso de este verso]
+      {% endif %}
+      <div class='child'>{{ v[5] }} [{{ v[8] }}, {{ v[9] }}]</div>
+      {% if loop.index in [4, 8, 11] %}
+        <p></p>
+      {% endif %}
+        </li>
+    {% else %}
+      <li><em>Ningún verso encontrado.</em></li>
+    {% endfor %}
+    </ol>
+    <p><input type="submit" value="Enviar"></p>
+    {% if verses|length < 14 %}
+      <p>Seleccione el siguiente verso:</p>
+      {% for opt in options %}
+        <input type='radio' name='chosen' value='{{ opt[0] }}'> {{ opt[1] }}<br>
+      {% else %}
+        <p>No hay opciones disponibles!</p>
+      {% endfor %}
+    {% endif%}
+    </form>
+    <p><a href="/again">Inventar otro soneto!</a></p>
+{% endblock content %}

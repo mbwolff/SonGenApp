@@ -33,7 +33,7 @@ keys = ['Author', 'Author Birth', 'Author Death', 'Author Given', 'Author Surnam
 'Copyright Status', 'Language', 'LoC Class', 'Num', 'Subject', 'Title']
 
 def db_insert(corpus):
-    sql = u'INSERT INTO english_metadata (Author, Birth, Death, Given, Surname, Copyright, Language, LoC, Num, Subject, Title) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+    sql = u'INSERT INTO metadata (Author, Birth, Death, Given, Surname, Copyright, Language, LoC, Num, Subject, Title) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
     for datum in corpus:
 #        try:
         mycursor.execute(sql, datum)

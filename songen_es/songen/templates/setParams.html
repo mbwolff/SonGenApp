@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import 'forms.html' as forms %}
+{% block head %}
+<title>{% block title %}Rellene el formulario{% endblock %}</title>
+{% endblock %}
+{% block content %}
+  <form method="post" action="/makeSonnet">
+    <p>Introduzca los términos para la analogía en el espacio vectorial de las palabras.</p>
+    {{ forms.input('Término positivo', 'pos', 'mujer') }}
+    {{ forms.input('Término negativo', 'neg', 'hombre') }}
+
+    {{ forms.hidden_input('last_verse', 0) }}
+    {{ forms.hidden_input('message', 0) }}
+    <input type="submit" value="Enviar">
+    <p>Seleccione un verso:</p>
+    {% for v in options %}
+      <input type='radio' name='chosen' value='{{ v[0] }}'
+      {% if loop.first %}
+        checked
+      {% endif %}
+      > {{ v[1] }}<br/>
+    {% else %}
+      <p>No se pudo encontrar ningún verso! <a href="/start">Inténtalo de nuevo.</a></p>
+    {% endfor %}
+    <p><input type="submit" value="Enviar"></p>
+  </form>
+{% endblock content%}

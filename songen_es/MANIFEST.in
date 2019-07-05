@@ -1,0 +1,2 @@
+graft songen/templates
+global-exclude *.pyc

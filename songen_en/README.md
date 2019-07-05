@@ -8,7 +8,7 @@ Here's the procedure:
 
 1. Download the poetry corpus and all of [Gutenberg, dammit](https://github.com/aparrish/gutenberg-dammit).
 2. Make a vector space for all words in the corpus using [Gensim's Word2Vec module](https://radimrehurek.com/gensim/models/word2vec.html). The words are lemmatized using [TreeTagger](https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/) to simplify the vector space.
-3. Build a [tf-idf matrix](https://scikit-learn.org/stable/modules/feature_extraction.html#tfidf-term-weighting) for all the verses in all the plays in the corpus.
+3. Build a [tf-idf matrix](https://scikit-learn.org/stable/modules/feature_extraction.html#tfidf-term-weighting) for all the pentameters in the corpus.
 4. Choose a pair of words to define an analogy (_woman_ and _man_, for instance). The pair will enable a modification of a verse by replacing words according to the analogy (_king_ is to _man_ as **_queen_** is to _woman_).
 5. Select a verse from the corpus.
 6. Modify the verse with word substitutions based on the vector space.
