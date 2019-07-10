@@ -2,7 +2,7 @@
 {% block title %}Inventar un soneto{% endblock title %}
 {% block content %}
     <h1>Inventar un soneto</h1>
-    <p>Introduzca los términos para la analogía en el espacio vectorial de las palabras.</p>
+    <p>Introduzca los términos para la analogía dentro del campo de vectores de palabras.</p>
     <form method='post' action='/makeSonnet'>
     <p>Término positivo : <input type='text' name='pos' value='{{ pos }}' size='20'></p>
     <p>Término negativo : <input type='text' name='neg' value='{{ neg }}' size='20'></p>
@@ -11,7 +11,7 @@
     {% endif %}
     <p><input type="submit" value="Enviar"></p>
     {% if verses|length > 1 %}
-      <p><input type='radio' name='revise' value='0' checked> No edites nada antes del verso {{ verses|length }}</p>
+      <p><input type='radio' name='revise' value='0' checked> No edite nada antes del verso {{ verses|length }}</p>
     {% endif %}
     <ol>
     {% for v in verses %}
