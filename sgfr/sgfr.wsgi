@@ -10,6 +10,7 @@ def eprint(*args, **kwargs):
 sgpath = '/var/www/SonGen/sgfr'
 logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, sgpath)
+sys.path.insert(0, '/usr/local/treetagger')
 os.chdir(sgpath)
 from songen import app as application
 eprint('wsgiWD: ' + os.getcwd())
