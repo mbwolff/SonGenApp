@@ -20,6 +20,7 @@ import random
 import numpy
 import scipy
 import sys
+import os
 import mysql.connector
 from datetime import datetime
 from .config import secret_key, model_file, no_phonemes, no_verses, tagdir, epi, IPAV, vowels
@@ -32,6 +33,7 @@ if __name__ == "__main__":
 app.secret_key = secret_key
 
 print('{timestamp} -- start loading model file'.format(timestamp=datetime.utcnow().isoformat()))
+eprint('sgWD: ' + os.getcwd())
 model = gensim.models.Word2Vec.load(model_file)
 
 print('{timestamp} -- start loading corpus from MySQL'.format(timestamp=datetime.utcnow().isoformat()))
