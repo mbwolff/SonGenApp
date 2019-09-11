@@ -26,6 +26,9 @@ from datetime import datetime
 from .config import secret_key, model_file, no_phonemes, no_verses, tagdir, epi, IPAV, vowels
 from .utils import eprint, connectMySQL, tag
 
+sys.path.insert(1, '/usr/local/treetagger/bin')
+sys.path.insert(2, '/usr/local/treetagger/cmd')
+
 app = Flask(__name__)
 if __name__ == "__main__":
     app.run()
