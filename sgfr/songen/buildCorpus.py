@@ -25,6 +25,7 @@ mydb = mysql.connector.connect(
   passwd="make_songenapp",
   database="songen",
   charset='utf8',
+  auth_plugin='mysql_native_password',
   use_unicode=True
 )
 
