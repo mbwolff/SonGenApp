@@ -11,7 +11,7 @@ import os
 import pickle
 #import spacy
 #import treetaggerwrapper
-from .treetagger import TreeTagger
+from treetagger import TreeTagger
 import re
 import csv
 import logging
