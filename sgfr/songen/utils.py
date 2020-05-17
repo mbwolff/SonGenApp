@@ -8,8 +8,8 @@ this notice are preserved. This file is offered as-is, without any warranty.
 """
 import mysql.connector
 import sys
-from .treetagger import TreeTagger
-from .config import host, mysql_user, mysql_passwd, database, tagdir
+from treetagger import TreeTagger
+from config import host, mysql_user, mysql_passwd, database, tagdir
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
