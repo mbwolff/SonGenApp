@@ -137,3 +137,6 @@ Fievre/
 # anything pickled
 *.pickled/
 *pickled/
+
+# ignore full database
+songenapp.sql
