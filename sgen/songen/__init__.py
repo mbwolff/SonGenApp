@@ -13,7 +13,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import re
 import string
 import pickle
-from .treetagger import TreeTagger
+# from .treetagger import TreeTagger
 import epitran
 import gensim
 import random

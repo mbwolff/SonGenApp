@@ -26,7 +26,9 @@ from utils import tag, eprint
 # Get the module below and the link for zfile from
 # github.com/aparrish/gutenberg-dammit
 from gutenbergdammit.ziputils import retrieve_one
-zfile = '../gutenberg-dammit-files-v002.zip'
+
+# You will need to point this var to where the zipfile is located on your drive.
+zfile = '../../../SonGenEngApp/gutenberg-dammit-files-v002.zip'
 
 json_path = 'gutenberg-dammit-files/gutenberg-metadata.json'
 path_root = 'gutenberg-dammit-files/'
@@ -37,6 +39,7 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 
 def getTagged(path):
 	pickleFile = open(path, 'rb')
+	eprint(path)
 	sentences = pickle.load(pickleFile)
 	return sentences
 
@@ -62,7 +65,7 @@ with zipfile.ZipFile(zfile, 'r') as myzip:
 		metadata = json.loads(myfile.read())
 for i in metadata:
 	fn = i['gd-num-padded'] + '.pkl'
-	if i['gd-num-padded'] in {'00004', '00050', '00127', '00744', '00212', '02583'}: # pi, e, phi
+	if i['gd-num-padded'] in {'00004', '00050', '00127', '00672', '00744', '00212', '02583'}: # pi, e, phi
 		continue
 	elif os.path.exists(os.path.join(pickledir, fn)):
 		eprint('Already have ' + i['gd-num-padded'])
@@ -85,6 +88,6 @@ for i in metadata:
 #		eprint('Dumped ' + i['gd-num-padded'])
 
 sentences = MySentences(pickledir) # a memory-friendly iterator
-model = gensim.models.Word2Vec(sentences, workers=4)
+model = gensim.models.Word2Vec(sentences, workers=8)
 model.init_sims(replace=True)
 model.save(saved)

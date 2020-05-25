@@ -19,11 +19,20 @@ import io
 import gzip
 import json
 from config import IPAV, vowels, epi
-from utils import eprint, connectMySQL
+from utils import eprint
 
-archive = '../gutenberg-poetry-v001.ndjson.gz'
+# You will need to point this var to where the file is located on your drive.
+archive = '../../../SonGenEngApp/gutenberg-poetry-v001.ndjson.gz'
 
-mydb = connectMySQL()
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="songenappmaker",
+  passwd="make_songenapp",
+  database="songen",
+  charset='utf8',
+  auth_plugin='mysql_native_password',
+  use_unicode=True
+)
 
 mycursor = mydb.cursor()
 mycursor.execute('SET NAMES UTF8;')
@@ -39,7 +48,7 @@ def add2corpus(corpus, string, gid):
     return corpus
 
 def db_insert(corpus):
-    sql = u'INSERT INTO corpus (gid,verse,ipa) VALUES (%s,%s,%s)'
+    sql = u'INSERT INTO english (gid,verse,ipa) VALUES (%s,%s,%s)'
     for datum in corpus:
         try:
             mycursor.execute(sql, datum)

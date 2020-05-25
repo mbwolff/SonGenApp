@@ -133,3 +133,7 @@ lib/
 
 # songen_fr source files
 Fievre/
+
+# anything pickled
+*.pickled/
+*pickled/

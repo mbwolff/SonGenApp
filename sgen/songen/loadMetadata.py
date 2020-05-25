@@ -17,13 +17,13 @@ import gzip
 import json
 from gutenbergdammit.ziputils import loadmetadata
 
-source = '../gutenberg-dammit-files-v002.zip'
+source = '../../../SonGenEngApp/gutenberg-dammit-files-v002.zip'
 
 mydb = mysql.connector.connect(
   host="localhost",
   user="songenappmaker",
   passwd="make_songenapp",
-  database="songenengapp",
+  database="songen",
   charset='utf8',
   use_unicode=True
 )

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Copyright (c) 2019 Mark Wolff <wolff.mark.b@gmail.com>
+Copyright (c) 2020 Mark Wolff <wolff.mark.b@gmail.com>
 
 Copying and distribution of this file, with or without modification, are
 permitted in any medium without royalty provided the copyright notice and
@@ -19,7 +19,7 @@ from six import iteritems
 from utils import eprint, tag
 from config import tagdir
 
-sourcedir = '/Users/mark/Research/2019 SonGen/CorpusSonetosSigloDeOro'
+sourcedir = '/media/psf/Home/Research/2019 SonGen/CorpusSonetosSigloDeOro'
 
 pickledir = 'Sonetos_pickled'
 saved = os.path.join('../lib', re.sub('pickled$', 'model', pickledir))
