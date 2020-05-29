@@ -30,6 +30,7 @@ sys.path.insert(1, '/usr/local/treetagger/bin')
 sys.path.insert(2, '/usr/local/treetagger/cmd')
 
 app = Flask(__name__)
+application = app
 if __name__ == "__main__":
     app.run()
 # Set the secret key to some random bytes. Keep this really secret!

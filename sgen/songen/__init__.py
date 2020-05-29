@@ -26,6 +26,7 @@ from .config import secret_key, model_file, no_phonemes, no_verses, tagdir, epi,
 from .utils import eprint, connectMySQL, tag
 
 app = Flask(__name__)
+application = app
 if __name__ == "__main__":
     app.run()
 # Set the secret key to some random bytes. Keep this really secret!
