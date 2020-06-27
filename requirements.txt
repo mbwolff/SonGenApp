@@ -8,7 +8,6 @@ constantly==15.1.0
 cryptography==2.8
 demosys-py==2.1.1
 docutils==0.16
-FoxDot==0.8.8
 glfw==1.4.0
 hyperlink==19.0.0
 idna==2.9
@@ -44,7 +43,6 @@ PyWavefront==1.0.4
 Send2Trash==1.5.0
 service-identity==18.1.0
 six==1.14.0
-thonny==3.2.7
 trimesh==3.6.33
 Twisted==20.3.0
 typed-ast==1.4.1

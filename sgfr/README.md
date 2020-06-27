@@ -7,7 +7,7 @@ The code for this project generates sonnets in French with [alexandrines](https:
 Here's the procedure:
 
 1. Scrape the links for all the XML files of the plays from [this page](http://www.theatre-classique.fr/pages/programmes/PageEdition.php) and then download them to build a corpus.
-2. Make a vector space for all words in the corpus using [Gensim's Word2Vec module](https://radimrehurek.com/gensim/models/word2vec.html). The words are lemmatized using [TreeTagger](https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/) to simplify the vector space.
+2. Make a vector space for all words in the corpus using [Gensim's Word2Vec module](https://radimrehurek.com/gensim/models/word2vec.html).
 3. Build a [tf-idf matrix](https://scikit-learn.org/stable/modules/feature_extraction.html#tfidf-term-weighting) for all the verses in all the plays in the corpus.
 4. Choose a pair of words to define an analogy (_femme_ and _homme_, for instance). The pair will enable a modification of a verse by replacing words according to the analogy (_roi_ is to _homme_ as **_reine_** is to _femme_).
 5. Select a verse from the corpus.
@@ -23,10 +23,10 @@ At the end of each verse is a reference to its source text and line number, whic
 1. Create subdirectories `lib` and `Fievre` in the `songen_fr` directory.
 2. Run `scrapeTheatreClassique.py` (in the `songen` subdirectory). This will download the files for plays from the  [Théâtre Classique](http://www.theatre-classique.fr) website and place them in the directory `Fievre`.
 4. Create a MySQL database with `songen.sql` (in the parent directory of `songen_fr`). You will need to create two users in MySQL, one to build the database (with `INSERT` and `SELECT` privileges) and one for the web server to access the database (with `SELECT` privileges). You can create these accounts by looking at the parameters set in `buildCorpus.py` and `makeSonnet.py`.
-5. Run `build.Corpus.py`, which inserts all alexandrines from verse plays in `Fievre` into the `français` database table along with their IPA transliterations. There may be formatting errors in the source data. These errors are easy to fix when the script throws an exception: just edit the source data and restart.
+5. Run `buildCorpus.py`, which inserts all alexandrines from verse plays in `Fievre` into the `français` database table along with their IPA transliterations. There may be formatting errors in the source data. These errors are easy to fix when the script throws an exception: just edit the source data and restart.
 6. Run `buildVectorSpace.py`. This will build the word embedding model and save it as `lib/Fievre_model`.
-7. The web application `makeSonnet.py` can now be deployed. I recommend [Gunicorn](https://gunicorn.org) for deployment. Set `songen_fr` as the active directory and run the following:
+7. The web application can now be deployed. I recommend [Gunicorn](https://gunicorn.org) for deployment. Set `sgfr` as the active directory and run the following:
 ```
 gunicorn -b localhost:5000 -w 4 -t 120 --preload songen:app
 ```
-When the server starts up it will first load the word embedding model and vectorize all the verses in the database. This takes a while (less than a minute on my 3-year-old MacBook Pro).
+When the server starts up it will first load the word embedding model and vectorize all the verses in the database.
