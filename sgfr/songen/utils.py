@@ -8,8 +8,9 @@ this notice are preserved. This file is offered as-is, without any warranty.
 """
 import mysql.connector
 import sys
-from .treetagger import TreeTagger
-from .config import host, mysql_user, mysql_passwd, database, tagdir
+# import spacy
+#from .treetagger import TreeTagger
+from .config import host, mysql_user, mysql_passwd, database
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -25,7 +26,7 @@ def connectMySQL():
     )
     return cnx
 
-def tag(string):
+# def tag(string):
 #    global tagdir
-    tt = TreeTagger(path_to_treetagger=tagdir, language='french')
-    return tt.tag(string)
+#    tt = TreeTagger(path_to_treetagger=tagdir, language='french')
+#    return tt.tag(string)

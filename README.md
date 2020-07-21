@@ -11,6 +11,5 @@ You will need to install the following Python modules (the current repo works fo
 
 * [this fork of epitran](https://github.com/mbwolff/epitran) (I have written custom rules for transliterating French verse into IPA: you do not need this fork if you will only use the English sonnet generator).
 * [mysql.connector](https://dev.mysql.com/doc/connector-python/en/)
-* [treetagger-python](https://github.com/miotto/treetagger-python) (already included here, but I want to acknowledge the source)
 * [gensim](https://radimrehurek.com/gensim/)
 * [flask](http://flask.pocoo.org)

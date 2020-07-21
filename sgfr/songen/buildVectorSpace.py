@@ -9,9 +9,9 @@ this notice are preserved. This file is offered as-is, without any warranty.
 
 import os
 import pickle
-#import spacy
+import spacy
 #import treetaggerwrapper
-from treetagger import TreeTagger
+# from treetagger import TreeTagger
 import re
 import csv
 import logging
@@ -19,14 +19,18 @@ import gensim
 import shutil
 import xml.etree.cElementTree as ET
 from six import iteritems
-from utils import eprint, tag
-from config import tagdir
+# from utils import eprint, tag
+from utils import eprint
+#from config import tagdir
 
 sourcedir = '../Fievre'
 
 pickledir = '../Fievre_pickled'
-saved = os.path.join('../lib', re.sub('pickled$', 'model', pickledir))
+#saved = os.path.join('../lib', re.sub('pickled$', 'model', pickledir))
+saved = '../lib/Fievre_model'
 #pos_dict = os.path.join('../lib', 'pos_dict.pkl')
+
+nlp = spacy.load('fr_core_news_md')
 
 ### functions and classes
 def getTagged(path):
@@ -44,8 +48,6 @@ class MySentences(object):
 					yield sent
 
 ######################
-# nlp = spacy.load('fr_core_news_sm')
-#tagger = treetaggerwrapper.TreeTagger(TAGLANG='fr', TAGDIR=tagdir)
 
 if not os.path.exists(pickledir):
     os.makedirs(pickledir)
@@ -100,55 +102,23 @@ for fname in os.listdir(sourcedir):
 			current_section = current_section + last_chunk
 			sections.append(re.sub('^\s+', '', current_section, flags=re.UNICODE))
 
-			section_counter = 0
 			for section in sections:
-#				doc = nlp(str(section))
-#				parsed = [(w.text, w.tag_, w.lemma_) for w in doc]
 				sentences = list()
-				sent = list()
-				for t in tag(section):
-#				for t in tagger.tag_text(section):
-#					eprint(t)
-#				for token in parsed:
-#					text = token[0]
-#					pos = token[1]
-#					lemma = token[2].lower()
-#					t = re.split('\t', t)
-					if len(t) < 3:
-						continue
-#					sent.append(tuple(t))
-					sent.append(t[2].lower())
-					if t[1] == 'SENT':
-						sentences.append(sent)
-						sent = list()
-				if len(sent) > 3:
+				doc = nlp(section)
+				for s in doc.sents:
+					sent = list()
+					for t in nlp(s.text):
+						sent.append(t.lemma_)
 					sentences.append(sent)
 
-#					if re.match('PUNCT', pos, flags=re.UNICODE) and re.match(r'[\.\!\?]', text, flags=re.UNICODE):
-#						sent.append(lemma)
-#						sentences.append(sent)
-#						sent = []
-#					else:
-#						if not re.match('PUNCT', pos, flags=re.UNICODE):
-#							lemma = re.sub('^\W+', '', lemma, flags=re.UNICODE)
-#							lemma = re.sub('\W+$', '', lemma, flags=re.UNICODE)
-#						if re.match('\w', pos, flags=re.UNICODE):
-#							sent.append(lemma)
-#							if pd.get(lemma):
-#								pd[lemma] = pd.get(lemma).add(pos)
-#							else:
-#								pd[lemma] = { pos }
-#				if len(sent) > 0:
-#					sentences.append(sent)
-				fn = nfname
-				if len(sections) > 1:
-					fn = re.sub('pkl$', str(section_counter) + '.pkl', fn)
-					section_counter = section_counter + 1
-				pickleFile = open(os.path.join(pickledir, fn), 'wb')
-				pickle.dump(sentences, pickleFile)
+			fn = nfname
+			section_counter = 0
+			if len(sections) > 1:
+				fn = re.sub('pkl$', str(section_counter) + '.pkl', fn)
+				section_counter = section_counter + 1
+			pickleFile = open(os.path.join(pickledir, fn), 'wb')
+			pickle.dump(sentences, pickleFile)
 
-#pickleFile = open(pos_dict, 'wb')
-#pickle.dump(pd, pickleFile)
 
 sentences = MySentences(pickledir) # a memory-friendly iterator
 model = gensim.models.Word2Vec(sentences, workers=4)
