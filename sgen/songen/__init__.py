@@ -13,6 +13,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import re
 import string
 import pickle
+import spacy
 # from .treetagger import TreeTagger
 import epitran
 import gensim
@@ -22,8 +23,10 @@ import scipy
 import sys
 import mysql.connector
 from datetime import datetime
-from .config import secret_key, model_file, no_phonemes, no_verses, tagdir, epi, IPAV, vowels
-from .utils import eprint, connectMySQL, tag
+from .config import secret_key, model_file, no_phonemes, no_verses, epi, IPAV, vowels
+from .utils import eprint, connectMySQL
+
+nlp = spacy.load('en_core_web_md')
 
 app = Flask(__name__)
 application = app
@@ -253,17 +256,21 @@ def getRhyme(ipa):
 
 def transform_verse(assertion, pos, neg):
     new_words = []
-    for w in tag(assertion):
+#    for w in tag(assertion):
+    for w in nlp(assertion):
         try:
             hits = []
-            for item in model.wv.most_similar_cosmul(positive=[pos] + [w[2]], negative=[neg]):
+#            for item in model.wv.most_similar_cosmul(positive=[pos] + [w[2]], negative=[neg]):
+            for item in model.wv.most_similar_cosmul(positive=[pos] + [w.lemma_], negative=[neg]):
                 hits.append(item[0])
             if len(hits) > 0:
                 new_words.append(hits[0])
             else:
-                new_words.append(w[0].lower())
+#                new_words.append(w[0].lower())
+                new_words.append(w.text.lower())
         except:
-            new_words.append(w[0].lower())
+#            new_words.append(w[0].lower())
+                new_words.append(w.text.lower())
     response = ' '.join(new_words)
     return response
 

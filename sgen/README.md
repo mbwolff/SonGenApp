@@ -7,7 +7,7 @@ The code for this project generates sonnets in English with [pentameters](https:
 Here's the procedure:
 
 1. Download the poetry corpus and all of [Gutenberg, dammit](https://github.com/aparrish/gutenberg-dammit).
-2. Make a vector space for all words in the corpus using [Gensim's Word2Vec module](https://radimrehurek.com/gensim/models/word2vec.html). The words are lemmatized using [TreeTagger](https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/) to simplify the vector space.
+2. Make a vector space for all words in the corpus using [Gensim's Word2Vec module](https://radimrehurek.com/gensim/models/word2vec.html). The words are lemmatized using [Spacy](https://spacy.io/) to simplify the vector space.
 3. Build a [tf-idf matrix](https://scikit-learn.org/stable/modules/feature_extraction.html#tfidf-term-weighting) for all the pentameters in the corpus.
 4. Choose a pair of words to define an analogy (_woman_ and _man_, for instance). The pair will enable a modification of a verse by replacing words according to the analogy (_king_ is to _man_ as **_queen_** is to _woman_).
 5. Select a verse from the corpus.
@@ -20,13 +20,13 @@ At the end of each verse is a reference to its source text, which can be referen
 
 ## Setup
 
-1. Create the subdirectory `lib` in the `songen_en` directory.
-2. Download the files for the poetry corpus and Gutenberg, dammit save them in the `songen_en` directory.
-3. Create a MySQL database with `songen.sql` (in the parent directory of `songen_en`). You will need to create two users in MySQL, one to build the database (with `INSERT` and `SELECT` privileges) and one for the web server to access the database (with `SELECT` privileges). You can create these accounts by looking at the parameters set in `buildCorpus.py` and `makeSonnet.py`.
+1. Create the subdirectory `lib` in the `sgen` directory.
+2. Download the files for the poetry corpus and [Gutenberg, dammit](https://github.com/aparrish/gutenberg-dammit) and save them in the `sgen` directory.
+3. Create a MySQL database with `songen.sql` (in the parent directory of `songen_en`). You will need to create two users in MySQL, one to build the database (with `INSERT` and `SELECT` privileges) and one for the web server to access the database (with `SELECT` privileges). You can create these accounts by looking at the parameters set in `buildCorpus.py` and `config.py`.
 4. Run `buildCorpus.py`, which inserts all pentameters in the poetry corpus into the `english` database table along with their IPA transliterations.
 5. Run `buildVectorSpace.py`. This will build the word embedding model and save it as `lib/gutenberg_model`.
 6. Run the `loadMetadata.py` to populate the `english_metadata` table.
-7. The web application `makeSonnet.py` can now be deployed. I recommend [Gunicorn](https://gunicorn.org) for deployment. Set `songen_en` as the active directory and run the following:
+7. The web application `makeSonnet.py` can now be deployed. I recommend [Gunicorn](https://gunicorn.org) for deployment. Set `sgen` as the active directory and run the following:
 ```
 gunicorn -b localhost:5001 -w 4 -t 120 --preload songen:app
 ```

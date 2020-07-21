@@ -104,12 +104,12 @@ for fname in os.listdir(sourcedir):
 
 			for section in sections:
 				sentences = list()
-				sent = list()
 				doc = nlp(section)
 				for s in doc.sents:
+					sent = list()
 					for t in nlp(s.text):
 						sent.append(t.lemma_)
-				sentences.append(sent)
+					sentences.append(sent)
 
 			fn = nfname
 			section_counter = 0

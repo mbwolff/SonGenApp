@@ -9,6 +9,7 @@ this notice are preserved. This file is offered as-is, without any warranty.
 
 import os
 import pickle
+import spacy
 import re
 import csv
 import logging
@@ -16,13 +17,14 @@ import gensim
 import shutil
 import xml.etree.ElementTree as ET
 from six import iteritems
-from utils import eprint, tag
-from config import tagdir
+from utils import eprint
+# from config import tagdir
 
 sourcedir = '/media/psf/Home/Research/2019 SonGen/CorpusSonetosSigloDeOro'
 
 pickledir = 'Sonetos_pickled'
 saved = os.path.join('../lib', re.sub('pickled$', 'model', pickledir))
+nlp = spacy.load('es_core_news_md')
 
 def getTagged(path):
 	pickleFile = open(path, 'rb')
@@ -63,53 +65,29 @@ for dname in os.listdir(sourcedir):
 #			ln = ''
 			for line in root.findall('.//{http://www.tei-c.org/ns/1.0}l'):
 				verse = line.text
-#				id = line.attrib['n']
-#				if id == ln or ln == '':
-#					string = string + ' ' + verse
-#				else:
-#					work.append(re.sub('^\s+', '', string))
-#					string = verse
-#				ln = id
-#				work.append(re.sub('^\s+', '', string))
 				work.append(re.sub('^\s+', '', verse))
 
-#			sections = []
-#			current_section = ''
-#			last_chunk = work.pop()
-#			for chunk in work:
-#				if len(current_section) + len(chunk) + 1 < 1000000:
-#				# Spacy requires texts of length no more than 1000000
-#					current_section = current_section + ' ' + chunk
-#				else:
-#					sections.append(current_section)
-#					current_section = chunk
-#
-#			current_section = current_section + last_chunk
-#			sections.append(re.sub('^\s+', '', current_section))
-
-#			section_counter = 0
-#			for section in sections:
 			text = ' '.join(work)
 			sentences = list()
-			sent = list()
-#			for t in tag(section):
-			for t in tag(text):
-#					eprint(t)
-				if len(t) < 2:
-					continue
-				elif t[2].lower() == '<unknown>':
-					t[2] = t[0]
-				sent.append(t[2].lower())
-				if t[1] == 'FS':
-					sentences.append(sent)
-					sent = list()
-			if len(sent) >= 2:
+			doc = nlp(text)
+			for s in doc.sents:
+				sent = list()
+				for t in nlp(s.text):
+					sent.append(t.lemma_)
 				sentences.append(sent)
 
-#			fn = nfname
-#			if len(sections) > 1:
-#				fn = re.sub('pkl$', str(section_counter) + '.pkl', fn)
-#				section_counter = section_counter + 1
+#			for t in tag(text):
+#				if len(t) < 2:
+#					continue
+#				elif t[2].lower() == '<unknown>':
+#					t[2] = t[0]
+#				sent.append(t[2].lower())
+#				if t[1] == 'FS':
+#					sentences.append(sent)
+#					sent = list()
+#			if len(sent) >= 2:
+#				sentences.append(sent)
+
 			pickleFile = open(os.path.join(pickledir, nfname), 'wb')
 			pickle.dump(sentences, pickleFile)
 			pickleFile.close()
