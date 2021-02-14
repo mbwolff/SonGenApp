@@ -60,31 +60,31 @@ model = gensim.models.Word2Vec.load(model_file)
 #eprint('Size of corpus: ' + str(len(corpus)))
 
 print('{timestamp} -- start loading vectorizer'.format(timestamp=datetime.utcnow().isoformat()))
-if os.path.exists(sparse_matrix_file):
-    print('{timestamp} -- load corpus from previously compressed file'.format(timestamp=datetime.utcnow().isoformat()))
-    vectorized_corpus = scipy.sparse.load_npz(sparse_matrix_file)
-else:
-    print('{timestamp} -- first load corpus from MySQL'.format(timestamp=datetime.utcnow().isoformat()))
-    corpus = list()
-    cnx = connectMySQL()
-    cursor = cnx.cursor()
-    query = ('SELECT id, fname, ln, verse, ipa FROM français')
-    cursor.execute(query)
-    #for (id, gid, verse, ipa) in cursor:
-    for (id, fname, ln, verse, ipa) in cursor:
-    #    corpus.append( (id, gid, verse, ipa) )
-        corpus.append( (id, fname, ln, verse, ipa) )
-    cursor.close()
-    cnx.close()
-    eprint('Size of corpus: ' + str(len(corpus)))
+#if os.path.exists(sparse_matrix_file):
+#    print('{timestamp} -- load corpus from previously compressed file'.format(timestamp=datetime.utcnow().isoformat()))
+#    vectorized_corpus = scipy.sparse.load_npz(sparse_matrix_file)
+#else:
+print('{timestamp} -- first load corpus from MySQL'.format(timestamp=datetime.utcnow().isoformat()))
+corpus = list()
+cnx = connectMySQL()
+cursor = cnx.cursor()
+query = ('SELECT id, fname, ln, verse, ipa FROM français')
+cursor.execute(query)
+#for (id, gid, verse, ipa) in cursor:
+for (id, fname, ln, verse, ipa) in cursor:
+#    corpus.append( (id, gid, verse, ipa) )
+    corpus.append( (id, fname, ln, verse, ipa) )
+cursor.close()
+cnx.close()
+eprint('Size of corpus: ' + str(len(corpus)))
 
-    vectorizer = TfidfVectorizer(
-        ngram_range=(1, 2),
-        token_pattern=r'\b\w+\b',
-        min_df=1)
-    vectorized_corpus = vectorizer.fit_transform([vers[3] for vers in corpus])
-    vectorized_corpus.todense()
-    scipy.sparse.save_npz(sparse_matrix_file, vectorized_corpus)
+vectorizer = TfidfVectorizer(
+    ngram_range=(1, 2),
+    token_pattern=r'\b\w+\b',
+    min_df=1)
+vectorized_corpus = vectorizer.fit_transform([vers[3] for vers in corpus])
+#    vectorized_corpus.todense()
+#    scipy.sparse.save_npz(sparse_matrix_file, vectorized_corpus)
 
 print('{timestamp} -- everything is loaded'.format(timestamp=datetime.utcnow().isoformat()))
 
