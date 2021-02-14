@@ -8,6 +8,7 @@ this notice are preserved. This file is offered as-is, without any warranty.
 """
 
 from flask import Flask, render_template, request, redirect, url_for, session
+from flask.sessions import SecureCookieSessionInterface
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import re
@@ -34,6 +35,8 @@ if __name__ == "__main__":
     app.run()
 # Set the secret key to some random bytes. Keep this really secret!
 app.secret_key = secret_key
+
+session_cookie = SecureCookieSessionInterface().get_signing_serializer(app)
 
 print('{timestamp} -- start loading model file'.format(timestamp=datetime.utcnow().isoformat()))
 model = gensim.models.Word2Vec.load(model_file)
