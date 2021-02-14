@@ -15,6 +15,8 @@ secret_key = b'c-\xf0$\xea\x102\n\xac`\xc5\xbc?VG\x13'
 # model_file = 'lib/Fievre_model'
 # model_file = path + '/' + 'lib/Fievre_model'
 model_file = str(Path(__file__).parent.parent.joinpath('lib/Fievre_model').absolute())
+#sparse_matrix_file = 'sparse_matrix.npz'
+sparse_matrix_file = str(Path(__file__).parent.parent.joinpath('lib/sparse_matrix.npz').absolute())
 no_phonemes = 2 # determines the richness of the rhyme
 no_verses = 50 # max number of verses presented to user
 

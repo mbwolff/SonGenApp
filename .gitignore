@@ -140,3 +140,6 @@ Fievre/
 
 # ignore full database
 songenapp.sql
+
+#ignore sparse_matrix.npz
+sparse_matrix.npz
