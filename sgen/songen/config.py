@@ -16,7 +16,8 @@ no_phonemes = 2 # determines the richness of the rhyme
 no_verses = 50 # max number of verses presented to user
 #tagdir='/usr/local/treetagger/'
 
-host = 'localhost'
+#host = 'localhost'
+host = 'node6160-env-4281256.us.reclaim.cloud'
 mysql_user = 'songenappuser'
 mysql_passwd = 'use_songenapp'
 database = 'songen'

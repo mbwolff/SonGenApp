@@ -60,8 +60,12 @@ vectorized_corpus = vectorizer.fit_transform([vers[2] for vers in corpus])
 print('{timestamp} -- everything is loaded'.format(timestamp=datetime.utcnow().isoformat()))
 
 @app.after_request
-def apply_caching(response):
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+#def apply_caching(response):
+#    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+#    return response
+def cookies(response):
+    same_cookie = session_cookie.dumps(dict(session))
+    response.headers.add("Set-Cookie", f"my_cookie={same_cookie}; Secure; HttpOnly; SameSite=None; Path=/;")
     return response
 
 @app.route('/start', methods=['GET', 'POST'])
