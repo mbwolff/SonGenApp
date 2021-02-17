@@ -7,7 +7,7 @@ with open(activate_this) as file_:
 import sys
 import logging
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0,"/var/www/webroot/ROOT/sgfr")
+sys.path.insert(0,"/var/www/webroot/ROOT/sgen")
 import os
-os.chdir("/var/www/webroot/ROOT/sgfr")
+os.chdir("/var/www/webroot/ROOT/sgen")
 from songen import app as application

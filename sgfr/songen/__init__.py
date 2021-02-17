@@ -8,6 +8,7 @@ this notice are preserved. This file is offered as-is, without any warranty.
 """
 
 from flask import Flask, render_template, request, redirect, url_for, session
+from flask.sessions import SecureCookieSessionInterface
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import re
@@ -24,7 +25,7 @@ import sys
 import os
 import mysql.connector
 from datetime import datetime
-from .config import secret_key, model_file, no_phonemes, no_verses, epi, IPAV, vowels
+from .config import secret_key, model_file, no_phonemes, no_verses, epi, IPAV, vowels, sparse_matrix_file
 from .utils import eprint, connectMySQL
 
 nlp = spacy.load('fr_core_news_md')
@@ -38,11 +39,32 @@ if __name__ == "__main__":
 # Set the secret key to some random bytes. Keep this really secret!
 app.secret_key = secret_key
 
+session_cookie = SecureCookieSessionInterface().get_signing_serializer(app)
+
 print('{timestamp} -- start loading model file'.format(timestamp=datetime.utcnow().isoformat()))
 eprint('sgWD: ' + os.getcwd())
 model = gensim.models.Word2Vec.load(model_file)
 
-print('{timestamp} -- start loading corpus from MySQL'.format(timestamp=datetime.utcnow().isoformat()))
+#print('{timestamp} -- start loading corpus from MySQL'.format(timestamp=datetime.utcnow().isoformat()))
+#corpus = list()
+#cnx = connectMySQL()
+#cursor = cnx.cursor()
+#query = ('SELECT id, fname, ln, verse, ipa FROM français')
+#cursor.execute(query)
+#for (id, gid, verse, ipa) in cursor:
+#for (id, fname, ln, verse, ipa) in cursor:
+#    corpus.append( (id, gid, verse, ipa) )
+#    corpus.append( (id, fname, ln, verse, ipa) )
+#cursor.close()
+#cnx.close()
+#eprint('Size of corpus: ' + str(len(corpus)))
+
+print('{timestamp} -- start loading vectorizer'.format(timestamp=datetime.utcnow().isoformat()))
+#if os.path.exists(sparse_matrix_file):
+#    print('{timestamp} -- load corpus from previously compressed file'.format(timestamp=datetime.utcnow().isoformat()))
+#    vectorized_corpus = scipy.sparse.load_npz(sparse_matrix_file)
+#else:
+print('{timestamp} -- first load corpus from MySQL'.format(timestamp=datetime.utcnow().isoformat()))
 corpus = list()
 cnx = connectMySQL()
 cursor = cnx.cursor()
@@ -56,18 +78,22 @@ cursor.close()
 cnx.close()
 eprint('Size of corpus: ' + str(len(corpus)))
 
-print('{timestamp} -- start loading vectorizer'.format(timestamp=datetime.utcnow().isoformat()))
 vectorizer = TfidfVectorizer(
     ngram_range=(1, 2),
     token_pattern=r'\b\w+\b',
     min_df=1)
 vectorized_corpus = vectorizer.fit_transform([vers[3] for vers in corpus])
+#    vectorized_corpus.todense()
+#    scipy.sparse.save_npz(sparse_matrix_file, vectorized_corpus)
 
 print('{timestamp} -- everything is loaded'.format(timestamp=datetime.utcnow().isoformat()))
 
 @app.after_request
-def apply_caching(response):
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+#def apply_caching(response):
+#    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+def cookies(response):
+    same_cookie = session_cookie.dumps(dict(session))
+    response.headers.add("Set-Cookie", f"my_cookie={same_cookie}; Secure; HttpOnly; SameSite=None; Path=/;")
     return response
 
 @app.route('/start', methods=['GET', 'POST'])
