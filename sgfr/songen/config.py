@@ -20,8 +20,8 @@ sparse_matrix_file = str(Path(__file__).parent.parent.joinpath('lib/sparse_matri
 no_phonemes = 2 # determines the richness of the rhyme
 no_verses = 50 # max number of verses presented to user
 
-#host = 'localhost'
-host = 'node6160-env-4281256.us.reclaim.cloud'
+host = 'localhost'
+#host = 'node6160-env-4281256.us.reclaim.cloud'
 mysql_user = 'songenappuser'
 mysql_passwd = 'use_songenapp'
 database = 'songen'

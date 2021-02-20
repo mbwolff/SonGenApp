@@ -68,7 +68,8 @@ print('{timestamp} -- everything is loaded'.format(timestamp=datetime.utcnow().i
 #    return response
 def cookies(response):
     same_cookie = session_cookie.dumps(dict(session))
-    response.headers.add("Set-Cookie", f"my_cookie={same_cookie}; Secure; HttpOnly; SameSite=None; Path=/;")
+#    response.headers.add("Set-Cookie", f"my_cookie={same_cookie}; Secure; HttpOnly; SameSite=None; Path=/;")
+    response.headers.add("Set-Cookie", f"my_cookie={same_cookie}; SameSite=None; Secure")
     return response
 
 @app.route('/start', methods=['GET', 'POST'])
