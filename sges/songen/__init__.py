@@ -24,7 +24,7 @@ import scipy
 import sys
 import mysql.connector
 from datetime import datetime
-from config import secret_key, model_file, no_phonemes, no_verses, epi, IPAV, vowels
+from .config import secret_key, model_file, no_phonemes, no_verses, epi, IPAV, vowels
 from .utils import eprint, connectMySQL
 
 nlp = spacy.load('es_core_news_md')

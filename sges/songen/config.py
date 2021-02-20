@@ -12,7 +12,7 @@ import re
 secret_key = b'c-\xf0$\xea\x102\n\xac`\xc5\xbc?VG\x13'
 
 model_file = 'lib/Sonetos_model'
-no_phonemes = 2 # determines the richness of the rhyme
+no_phonemes = 2 # determines the richness of the rhyme 
 no_verses = 50 # max number of verses presented to user
 #tagdir='/usr/local/treetagger/'
 
