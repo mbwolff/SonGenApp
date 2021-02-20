@@ -94,7 +94,7 @@ print('{timestamp} -- everything is loaded'.format(timestamp=datetime.utcnow().i
 def cookies(response):
     same_cookie = session_cookie.dumps(dict(session))
 #    response.headers.add("Set-Cookie", f"my_cookie={same_cookie}; Secure; HttpOnly; SameSite=None; Path=/;")
-    response.headers.add("Set-Cookie", f"my_cookie={same_cookie}; SameSite=None; Secure")
+    response.headers.add("Set-Cookie", f"session={same_cookie}; SameSite=None; Secure")
     return response
 
 @app.route('/start', methods=['GET', 'POST'])
@@ -429,16 +429,16 @@ def getIndex(v, c):
                 index = i
     return index
 
-def nocache(view):
-    @wraps(view)
-    def no_cache(*args, **kwargs):
-        response = make_response(view(*args, **kwargs))
-        response.headers['Last-Modified'] = datetime.now()
-        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '-1'
-        return response
-    return update_wrapper(no_cache, view)
+#def nocache(view):
+#    @wraps(view)
+#    def no_cache(*args, **kwargs):
+#        response = make_response(view(*args, **kwargs))
+#        response.headers['Last-Modified'] = datetime.now()
+#        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+#        response.headers['Pragma'] = 'no-cache'
+#        response.headers['Expires'] = '-1'
+#        return response
+#    return update_wrapper(no_cache, view)
 
 def getCorpus():
     corpus = list()
