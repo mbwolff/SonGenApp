@@ -21,7 +21,7 @@ gunicorn==20.0.4
 gutenbergdammit @ https://github.com/aparrish/gutenberg-dammit/archive/master.zip
 idna==2.9
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 jmespath==0.10.0
 joblib==0.15.1
 marisa-trie==0.7.5
