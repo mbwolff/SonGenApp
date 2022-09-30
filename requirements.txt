@@ -23,7 +23,7 @@ idna==2.9
 itsdangerous==1.1.0
 Jinja2==2.11.2
 jmespath==0.10.0
-joblib==0.15.1
+joblib==1.2.0
 marisa-trie==0.7.5
 MarkupSafe==1.1.1
 munkres==1.1.2
